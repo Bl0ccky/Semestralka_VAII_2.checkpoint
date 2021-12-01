@@ -1,0 +1,1 @@
+# Semestralka_VAII_2.checkpoint
