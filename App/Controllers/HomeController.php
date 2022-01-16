@@ -180,6 +180,10 @@ class HomeController extends AControllerRedirect
         {
             $tours = Tour::getAll('price > ?', [$minPrice]);
         }
+        else
+        {
+            $tours = Tour::getAll('price > ? AND price < ?', [$minPrice, $maxPrice]);
+        }
         if(empty($tours))
         {
             return $this->json('ArrayIsEmpty');

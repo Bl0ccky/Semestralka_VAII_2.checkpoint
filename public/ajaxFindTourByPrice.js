@@ -41,7 +41,7 @@ class FilteredTours {
 
                     }
                 } else {
-                    document.getElementById("tours").innerHTML = html;
+                    document.getElementById("tours").innerHTML = html+"<div class='oNasText'>"+"Zadanému rozsahu nevyhovuje žiadny zájazd!"+"</div>";
                 }
 
             });

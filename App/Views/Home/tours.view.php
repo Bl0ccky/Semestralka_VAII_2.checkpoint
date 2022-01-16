@@ -10,7 +10,7 @@
         <?php } ?>
         <div class="oNasText">
             <div class="row mb-3 ">
-                <div class="col-sm-2 align-self-center">
+                <div class="col-sm-2 align-self-start mt-1">
                     <h6><label for="min_price" class="mb-0">Min cena zájazdu</label></h6>
                 </div>
                 <div class="col-sm-2 text-secondary form_input">
@@ -22,7 +22,7 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-sm-2 align-self-center">
+                <div class="col-sm-2 align-self-start mt-1">
                     <h6><label for="max_price" class="mb-0">Max cena zájazdu</label></h6>
                 </div>
                 <div class="col-sm-2 text-secondary form_input">

@@ -109,7 +109,7 @@ function checkInputs(e) {
         today.getHours(),
         today.getMinutes());
 
-    if(editPassword_form == null || btn_filter == null)
+    if(editPassword_form == null && btn_filter == null)
     {
         //Validácia mena
         nameValue = name.value;
@@ -307,7 +307,7 @@ function checkInputs(e) {
     {
         minPriceValue = minPrice.value;
         maxPriceValue = maxPrice.value;
-        if (minPriceValue < maxPriceValue)
+        if (parseInt(minPriceValue) > parseInt(maxPriceValue))
         {
             setErrorFor(maxPrice, 'Minimálna cena musí byť menšia než maximálna!', e);
         }
@@ -317,7 +317,7 @@ function checkInputs(e) {
 
         }
 
-        if (minPriceValue < maxPriceValue)
+        if (parseInt(minPriceValue) > parseInt(maxPriceValue))
         {
             setErrorFor(minPrice, 'Minimálna cena musí byť menšia než maximálna!', e);
         }
@@ -336,11 +336,17 @@ function setSuccessFor(input)
     let formInput = input.parentElement;
     let i = formInput.querySelector('i');
     let p = formInput.querySelector('p');
-    if(reg_form != null || addTour_form != null || editPassword_form != null || addBlog_form != null || btn_filter != null)
+    if(reg_form != null || addTour_form != null || editPassword_form != null || addBlog_form != null)
     {
         p.className = 'visually-hidden errorText';
         i.className = 'mt-2 fas fa-check-circle';
         formInput.className = 'mb-3 form_input success';
+    }
+    else if(btn_filter != null)
+    {
+        p.className = 'visually-hidden errorText';
+        i.className = 'mt-2 fas fa-check-circle';
+        formInput.className = 'col-2 mb-3 form_input success';
     }
     else if(editProfile_form != null || editTour_form != null)
     {
@@ -357,11 +363,19 @@ function setErrorFor(input, message, e)
     let p = formInput.querySelector('p');
     let i = formInput.querySelector('i');
 
-    if(reg_form != null || addTour_form != null || editPassword_form || addBlog_form != null || btn_filter != null)
+    if(reg_form != null || addTour_form != null || editPassword_form || addBlog_form != null)
     {
         e.preventDefault();
         p.className = 'errorText';
         formInput.className = 'mb-3 form_input error';
+        i.className = 'mt-2 fas fa-exclamation-circle';
+        p.innerText = message;
+    }
+    else if(btn_filter != null)
+    {
+        e.preventDefault();
+        p.className = 'errorText';
+        formInput.className = 'col-2 mb-3 form_input error';
         i.className = 'mt-2 fas fa-exclamation-circle';
         p.innerText = message;
     }
