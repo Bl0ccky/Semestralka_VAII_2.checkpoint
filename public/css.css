@@ -228,6 +228,18 @@ body
     color: #e74c3c;
 }
 
+.errorText
+{
+    color: white;
+    font-size: 15px;
+}
+
+.errorText2
+{
+    color: black;
+    font-size: 15px;
+}
+
 
 
 

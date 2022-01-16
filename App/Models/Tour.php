@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Auth;
 use App\Core\Model;
 
 class Tour extends Model
@@ -12,14 +13,13 @@ class Tour extends Model
                                 public ?string $date = null,
                                 public ?string $info = null,
                                 public ?string $image = null,
-                                public int $number_of_orders = 0,
                                 public int $capacity = 5)
     {
     }
 
     static public function setDbColumns()
     {
-        return ['id', 'name', 'price', 'date', 'info', 'image', 'number_of_orders', 'capacity'];
+        return ['id', 'name', 'price', 'date', 'info', 'image', 'capacity'];
     }
 
     static public function setTableName()
@@ -83,6 +83,12 @@ class Tour extends Model
         return $this->date;
     }
 
+    public function getDateEU(): ?string
+    {
+        $date = date_create($this->date);
+        return date_format($date,"d.m.Y");
+    }
+
     /**
      * @param string|null $date
      */
@@ -123,21 +129,6 @@ class Tour extends Model
         $this->image = $image;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfOrders(): int
-    {
-        return $this->number_of_orders;
-    }
-
-    /**
-     * @param int $number_of_orders
-     */
-    public function setNumberOfOrders(int $number_of_orders): void
-    {
-        $this->number_of_orders = $number_of_orders;
-    }
 
     /**
      * @return int
@@ -155,30 +146,13 @@ class Tour extends Model
         $this->capacity = $capacity;
     }
 
-    public function addTourMember()
-    {
-        if(!$this->isFull())
-        {
-            $this->number_of_orders++;
-        }
-
-    }
-
-    public function removeTourMember()
-    {
-        if($this->number_of_orders > 0)
-        {
-            $this->number_of_orders--;
-        }
-
-    }
-
     public function isFull()
     {
-        if($this->number_of_orders == $this->capacity)
+        if(Auth::getNumOfOrdersForTour(self::getId()) == $this->capacity)
         {
             return true;
         }
+        return false;
     }
 
 

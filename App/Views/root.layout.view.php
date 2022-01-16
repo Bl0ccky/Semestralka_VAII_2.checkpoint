@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <title>BookWell</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
@@ -13,7 +14,7 @@
 
 </head>
 <body>
-<nav class="navbar fixed-top navbar-expand-md">
+<nav class="navbar fixed-top navbar-expand-lg">
     <div class="container-fluid">
         <a href="?c=home&a=index"> <img class="logo" src="public/images/logo.png" alt="Logo"></a>
         <div class="popis_logo">BookWell</div>
@@ -28,28 +29,42 @@
                        href="?c=home&a=index">Domov</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= $data['active'] == "about" ? "active" : "" ?>" href="?c=home&a=about">O nás</a>
+                    <a class="nav-link <?= $data['active'] == "about" ? "active" : "" ?>" href="?c=home&a=about">O
+                        nás</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link <?= $data['active'] == "tours" ? "active" : "" ?>" href="?c=home&a=tours">Zájazdy</a>
+                    <a class="nav-link <?= $data['active'] == "tours" ? "active" : "" ?>"
+                       href="?c=home&a=tours">Zájazdy</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link <?= $data['active'] == "blogs" ? "active" : "" ?>"
+                       href="?c=home&a=blogs">Blog</a>
                 </li>
 
                 <?php if (\App\Auth::isLogged() && \App\Auth::isAdmin($_SESSION['email'])) { ?>
-                <li class="nav-item">
-                    <a class="nav-link <?= $data['active'] == "addTour" ? "active" : "" ?>"
-                       href="?c=admin&a=addTourForm">Pridať zájazd</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $data['active'] == "addTour" ? "active" : "" ?>"
+                           href="?c=admin&a=addTourForm">Pridať zájazd</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $data['active'] == "addBlog" ? "active" : "" ?>"
+                           href="?c=admin&a=addBlogForm">Pridať blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $data['active'] == "adminer" ? "active" : "" ?>"
+                           href="?c=admin&a=adminer">Adminer</a>
+                    </li>
                 <?php } ?>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <?php if (\App\Auth::isLogged()) { ?>
-                <li class="nav-item">
-                    <a class="nav-link profile <?= $data['active'] == "profile" ? "active" : "" ?>"
-                       href="?c=auth&a=profile"><?= \App\Models\User::getOne(\App\Auth::getId())->getLogin() ?></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?c=auth&a=logout">Logout</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link profile <?= $data['active'] == "profile" ? "active" : "" ?>"
+                           href="?c=auth&a=profile"><?= \App\Models\User::getOne(\App\Auth::getId())->getLogin() ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="?c=auth&a=logout">Logout</a>
+                    </li>
                 <?php } else { ?>
                     <li class="nav-item">
                         <a class="nav-link <?= $data['active'] == "login" ? "active" : "" ?>"
@@ -106,6 +121,5 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
 

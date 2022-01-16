@@ -1,18 +1,22 @@
 <?php /** @var Array $data */ ?>
-<title>Login</title>
 <div class="container">
+    <?php if ($data['correctMessage'] != "") { ?>
+        <div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+            <strong><?= $data['correctMessage'] ?></strong>
+            <?php if ($data['correctMessage2'] != "") { ?>
+                    <div>
+                <strong><?= $data['correctMessage2'] ?></strong>
+                    </div>
+            <?php } ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php } ?>
     <div class="row">
         <div class="col-sm-4 offset-sm-4">
             <?php if ($data['error'] != "") { ?>
                 <div class="alert alert-danger alert-dismissible">
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     <?= $data['error'] ?>
-                </div>
-            <?php } else if($data['message'] != "") { ?>
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    <h5><?= $data['message'] ?></h5>
-                    <p><?= $data['message2'] ?></p>
                 </div>
             <?php } ?>
             <form method="post" action="?c=auth&a=login">
@@ -29,7 +33,7 @@
                         <button type="submit" class="btn btn-warning">Prihlásiť</button>
                     </div>
                     <div class="col-6 text-center">
-                        <a type="button" href="?c=auth&a=registrationForm" class="btn btn-warning">Nemám konto</a>
+                        <a href="?c=auth&a=registrationForm" class="btn btn-warning">Nemám konto</a>
                     </div>
                 </div>
             </form>

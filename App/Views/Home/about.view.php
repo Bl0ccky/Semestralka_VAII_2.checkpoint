@@ -1,5 +1,4 @@
 <?php /** @var Array $data */ ?>
-<title>O nás</title>
 <div class="container">
     <div class="tourGuyNadpis">O nás</div>
     <div class="oNasText">Sme partia ľudí, ktorí radi cestujú a chceli by túto tému priblížiť aj ostatným.

@@ -1,6 +1,11 @@
 const reg_form = document.getElementById('reg_form');
-const edit_form = document.getElementById('edit_form');
-const addTour_form = document.getElementById('addTour_form');
+const editProfile_form = document.getElementById('editProfileForm');
+const addTour_form = document.getElementById('addTourForm');
+const editPassword_form = document.getElementById('editPasswordForm');
+const editTour_form = document.getElementById('editTourForm');
+const addBlog_form = document.getElementById('addBlogForm');
+const btn_filter = document.getElementById('btn_filter');
+
 const name = document.getElementById('name');
 const lastName = document.getElementById('lastName');
 const date = document.getElementById('date');
@@ -9,6 +14,12 @@ const login = document.getElementById('login');
 const password = document.getElementById('password');
 const price = document.getElementById('price');
 const capacity = document.getElementById('capacity');
+const oldPassword = document.getElementById('old_password');
+const newPassword = document.getElementById('new_password');
+const newPasswordAgain = document.getElementById('new_password_again');
+const minPrice = document.getElementById('min_price');
+const maxPrice = document.getElementById('max_price');
+
 
 if(reg_form != null)
 {
@@ -16,9 +27,9 @@ if(reg_form != null)
         checkInputs(e);
     })
 }
-else if(edit_form !=null)
+else if(editProfile_form !=null)
 {
-    edit_form.addEventListener('submit', (e) =>{
+    editProfile_form.addEventListener('submit', (e) =>{
         checkInputs(e);
     })
 }
@@ -28,6 +39,31 @@ else if(addTour_form !=null)
         checkInputs(e);
     })
 }
+else if(editPassword_form !=null)
+{
+    editPassword_form.addEventListener('submit', (e) =>{
+        checkInputs(e);
+    })
+}
+else if(editTour_form !=null)
+{
+    editTour_form.addEventListener('submit', (e) =>{
+        checkInputs(e);
+    })
+}
+else if(addBlog_form !=null)
+{
+    addBlog_form.addEventListener('submit', (e) =>{
+        checkInputs(e);
+    })
+}
+else if(btn_filter !=null)
+{
+    btn_filter.addEventListener('click', (e) =>{
+        checkInputs(e);
+    })
+}
+
 
 
 function checkInputs(e) {
@@ -40,12 +76,17 @@ function checkInputs(e) {
     let dateValue;
     let today;
     let validMinBirthDate;
+    let validMaxBirthDate;
     let validMinTourDate;
     let priceValue;
     let capacityValue;
+    let oldPasswordValue;
+    let newPasswordValue;
+    let newPasswordAgainValue;
+    let minPriceValue;
+    let maxPriceValue;
 
-    nameValue = name.value;
-    dateValue = new Date(date.value);
+
     today = new Date();
     validMinBirthDate = new Date(
         today.getFullYear() - 18,
@@ -54,45 +95,58 @@ function checkInputs(e) {
         today.getHours(),
         today.getMinutes());
 
-    validMinTourDate = new Date(
-        today.getFullYear(),
+    validMaxBirthDate = new Date(
+        today.getFullYear() - 110,
         today.getMonth(),
-        today.getDate() + 7,
+        today.getDate(),
         today.getHours(),
         today.getMinutes());
 
-    //Validácia mena
-    if (!nameValue.charAt(0).match(/^[A-Z]+$/))
+    validMinTourDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() + 14,
+        today.getHours(),
+        today.getMinutes());
+
+    if(editPassword_form == null || btn_filter == null)
     {
-        setErrorFor(name, 'Prvý znak musí byť veľký!', e);
-    }
-    else if (!nameValue.match(/^[A-Za-z]+$/))
-    {
-        setErrorFor(name, 'Meno musí obsahovať len písmená!', e);
-    }
-    else
-    {
-        setSuccessFor(name);
+        //Validácia mena
+        nameValue = name.value;
+        if (nameValue.length > 255)
+        {
+            setErrorFor(name, 'Meno je príliš dlhé!', e);
+        }
+        else
+        {
+            setSuccessFor(name);
+        }
     }
 
 
     //Validácia dátumu
-    if(reg_form != null || edit_form != null)
+    if(reg_form != null || editProfile_form != null)
     {
+        dateValue = new Date(date.value);
         if (dateValue > validMinBirthDate)
         {
-            setErrorFor(date, 'Dátum musí byť aspoň 18 rokov starý!', e);
+            setErrorFor(date, 'Musíš mať aspoň 18 rokov!', e);
+        }
+        else if(dateValue < validMaxBirthDate)
+        {
+            setErrorFor(date, 'Dátum je príliš starý!', e);
         }
         else
         {
             setSuccessFor(date);
         }
     }
-    else if(addTour_form != null)
+    else if(addTour_form != null || editTour_form != null)
     {
+        dateValue = new Date(date.value);
         if (dateValue < validMinTourDate)
         {
-            setErrorFor(date, 'Dátum musí byť najmenej týžden po dnešnom!', e);
+            setErrorFor(date, 'Dátum musí byť min. o 2 týždne neskôr', e);
         }
         else
         {
@@ -100,21 +154,17 @@ function checkInputs(e) {
         }
     }
 
-    if(reg_form != null || edit_form != null)
+    if(reg_form != null || editProfile_form != null)
     {
         lastNameValue = lastName.value;
         emailValue = email.value;
         loginValue = login.value;
-        passwordValue = password.value;
+
 
         //Validácia priezviska
-        if (!lastNameValue.charAt(0).match(/^[A-Z]+$/))
+        if (lastNameValue.length > 255)
         {
-            setErrorFor(lastName, 'Prvý znak musí byť veľký!', e);
-        }
-        else if (!lastNameValue.match(/^[A-Za-z]+$/))
-        {
-            setErrorFor(lastName, 'Priezvisko musí obsahovať len písmená!', e);
+            setErrorFor(lastName, 'Priezvisko je moc dlhé!', e);
         }
         else
         {
@@ -126,34 +176,54 @@ function checkInputs(e) {
         {
             setErrorFor(email, 'Zlý formát emailu!', e);
         }
+        else if(emailValue.length > 255)
+        {
+            setErrorFor(email, 'Email je moc dlhý!', e);
+        }
         else
         {
             setSuccessFor(email);
         }
 
         //Validácia loginu
-        if (!loginValue.charAt(0).match(/^[A-Z]+$/))
+        if (loginValue.length > 255)
         {
-            setErrorFor(login, 'Prvý znak musí byť veľký!', e);
+            setErrorFor(login, 'Login je moc dlhý!', e);
         }
         else
         {
             setSuccessFor(login);
         }
-
-        //Validácia hesla
-        if (passwordValue.length <= 6)
+        if(reg_form != null)
         {
-            setErrorFor(password, 'Heslo musí mať aspoň 7 znakov!', e);
-        }
-        else
-        {
-            setSuccessFor(password);
-        }
+            passwordValue = password.value;
+            //Validácia hesla
+            if (passwordValue.length > 255)
+            {
+                setErrorFor(password, 'Heslo je príliš dlhé', e);
 
+            }
+            else if(passwordValue.length < 8 ||
+                !passwordValue.match(/[0-9]+/) ||
+                !passwordValue.match(/[A-Z]+/) ||
+                !passwordValue.match(/[a-z]+/) ||
+                !passwordValue.match(/\W+/))
+            {
+                setErrorFor(password,
+                    'Heslo musí mať aspoň 8 znakov!\n' +
+                    'Heslo musí obsahovať číslo!\n' +
+                    'Heslo musí obsahovať veľké písmeno!\n' +
+                    'Heslo musí obsahovať malé písmeno!\n' +
+                    'Heslo musí obsahovať špeciálny znak!\n', e);
+            }
+            else
+            {
+                setSuccessFor(password);
+            }
+        }
 
     }
-    else if(addTour_form != null)
+    else if(addTour_form != null || editTour_form != null)
     {
         priceValue = price.value;
         capacityValue = capacity.value;
@@ -171,17 +241,93 @@ function checkInputs(e) {
         //Validácia kapacity
         if (capacityValue < 5)
         {
-            setErrorFor(capacity, 'Kapacita je príliš nízka!', e);
+            setErrorFor(capacity, 'Kapacita je príliš nízka! Min. 5', e);
         }
         else
         {
             setSuccessFor(capacity);
         }
     }
+    else if(editPassword_form != null)
+    {
+        oldPasswordValue = oldPassword.value;
+        newPasswordValue = newPassword.value;
+        newPasswordAgainValue = newPasswordAgain.value;
 
+        if(oldPasswordValue > 255)
+        {
+            setErrorFor(oldPassword, 'Heslo je príliš dlhé', e);
+        }
+        else
+        {
+            setSuccessFor(oldPassword);
+        }
 
+        if(newPasswordValue > 255)
+        {
+            setErrorFor(newPassword, 'Heslo je príliš dlhé', e);
+        }
+        else if(newPasswordValue.length < 8 ||
+            !newPasswordValue.match(/[0-9]+/) ||
+            !newPasswordValue.match(/[A-Z]+/) ||
+            !newPasswordValue.match(/[a-z]+/) ||
+            !newPasswordValue.match(/\W+/))
+        {
+            setErrorFor(newPassword,
+                'Heslo musí mať aspoň 8 znakov!\n' +
+                'Heslo musí obsahovať číslo!\n' +
+                'Heslo musí obsahovať veľké písmeno!\n' +
+                'Heslo musí obsahovať malé písmeno!\n' +
+                'Heslo musí obsahovať špeciálny znak!\n', e);
+        }
+        else if(newPasswordValue !== newPasswordAgainValue)
+        {
+            setErrorFor(newPassword, 'Zadané nové heslo sa nezhoduje s overením nového hesla!', e);
+        }
+        else
+        {
+            setSuccessFor(newPassword);
+        }
 
+        if(newPasswordAgainValue > 255)
+        {
+            setErrorFor(newPasswordAgain, 'Heslo je príliš dlhé', e);
+        }
+        else if(newPasswordValue !== newPasswordAgainValue)
+        {
+            setErrorFor(newPasswordAgain, 'Zadané nové heslo sa nezhoduje s overením nového hesla!', e);
+        }
+        else
+        {
+            setSuccessFor(newPasswordAgain);
+        }
 
+    }
+    else if(btn_filter != null)
+    {
+        minPriceValue = minPrice.value;
+        maxPriceValue = maxPrice.value;
+        if (minPriceValue < maxPriceValue)
+        {
+            setErrorFor(maxPrice, 'Minimálna cena musí byť menšia než maximálna!', e);
+        }
+        else
+        {
+            setSuccessFor(maxPrice);
+
+        }
+
+        if (minPriceValue < maxPriceValue)
+        {
+            setErrorFor(minPrice, 'Minimálna cena musí byť menšia než maximálna!', e);
+        }
+        else
+        {
+            setSuccessFor(minPrice);
+
+        }
+
+    }
 
 }
 
@@ -189,62 +335,44 @@ function setSuccessFor(input)
 {
     let formInput = input.parentElement;
     let i = formInput.querySelector('i');
-    let small = formInput.querySelector('small');
-    if(reg_form != null)
+    let p = formInput.querySelector('p');
+    if(reg_form != null || addTour_form != null || editPassword_form != null || addBlog_form != null || btn_filter != null)
     {
-        small.className = 'visually-hidden oNasText';
-        i.className = 'mt-2 oNasText fas fa-check-circle';
+        p.className = 'visually-hidden errorText';
+        i.className = 'mt-2 fas fa-check-circle';
         formInput.className = 'mb-3 form_input success';
     }
-    else if(edit_form != null)
+    else if(editProfile_form != null || editTour_form != null)
     {
-        small.className = 'visually-hidden oNasText';
-        i.className = 'mt-2 oNasText2 fas fa-check-circle';
+        p.className = 'visually-hidden errorText';
+        i.className = 'mt-2 fas fa-check-circle';
         formInput.className = 'col-sm-9 text-secondary form_input success';
     }
-
-    else if(addTour_form != null)
-    {
-        small.className = 'visually-hidden oNasText';
-        i.className = 'mt-2 oNasText fas fa-check-circle';
-        formInput.className = 'mb-3 form_input success';
-    }
-
 
 }
 
 function setErrorFor(input, message, e)
 {
     let formInput = input.parentElement;
-    let small = formInput.querySelector('small');
+    let p = formInput.querySelector('p');
     let i = formInput.querySelector('i');
 
-    if(reg_form != null)
+    if(reg_form != null || addTour_form != null || editPassword_form || addBlog_form != null || btn_filter != null)
     {
         e.preventDefault();
-        small.className = 'oNasText';
+        p.className = 'errorText';
         formInput.className = 'mb-3 form_input error';
-        i.className = 'mt-2 oNasText fas fa-exclamation-circle';
-        small.innerText = message;
+        i.className = 'mt-2 fas fa-exclamation-circle';
+        p.innerText = message;
     }
-    else if(edit_form != null)
+    else if(editProfile_form != null || editTour_form != null)
     {
         e.preventDefault();
-        small.className = 'oNasText2';
+        p.className = 'errorText2';
         formInput.className = 'col-sm-9 text-secondary form_input error';
-        i.className = 'mt-2 oNasText fas fa-exclamation-circle';
-        small.innerText = message;
+        i.className = 'mt-2 fas fa-exclamation-circle';
+        p.innerText = message;
     }
-
-    else if(addTour_form != null)
-    {
-        e.preventDefault();
-        small.className = 'oNasText';
-        formInput.className = 'mb-3 form_input error';
-        i.className = 'mt-2 oNasText fas fa-exclamation-circle';
-        small.innerText = message;
-    }
-
 
 }
 

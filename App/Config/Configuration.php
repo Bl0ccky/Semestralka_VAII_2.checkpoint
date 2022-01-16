@@ -21,6 +21,10 @@ class Configuration
 
     public const DEBUG_QUERY = false;
 
-    public const UPLOAD_DIR = "public/tours/";
+    public const TOUR_IMAGE_DIR = "public/tours_images/";
     public const PROFILE_IMAGE_DIR = "public/profile_images/";
+    public const DEFAULT_PROFILE_IMAGE = "public/images/default_profile_pic.png";
+    public const BLOG_IMAGE_DIR = "public/blog_images/";
+
+
 }

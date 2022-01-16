@@ -2,11 +2,27 @@
 $id_tour = $data['id_tour'];
 $tour = \App\Models\Tour::getOne($id_tour); ?>
 
-<title><?= $tour->getName() ?></title>
 <div class="container">
-    <div class="tourGuyNadpis mb-4"><?= $tour->getName() ?>
-        <img class="img_country" src="<?= \App\Config\Configuration::UPLOAD_DIR . $tour->getImage() ?>" alt="country_img">
+    <?php if ($data['successEdit'] != "") { ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><?= $data['successEdit'] ?></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php } ?>
+    <div class="row">
+        <div class="tourGuyNadpis mb-4 col-3"><?= $tour->getName() ?>
+            <form class="col-3" method="post" action="?c=admin&a=specificTourEditForm">
+                <button type="submit" class="btn p-0" style="color: white; font-size: 20px;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <input name="edited_tour" type="hidden" value="<?= $tour->getId(); ?>">
+            </form>
+        </div>
+        <div class="col-1">
+            <img class="img_country" src="<?= \App\Config\Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>" alt="country_img">
+        </div>
     </div>
+
 
     <div class="main-body">
         <div class="row gutters-sm">
@@ -27,7 +43,7 @@ $tour = \App\Models\Tour::getOne($id_tour); ?>
                                 <h6 class="mb-0">Termín</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <?= $tour->getDate() ?>
+                                <?= $tour->getDateEU() ?>
                             </div>
                         </div>
                         <hr>
@@ -134,7 +150,7 @@ $tour = \App\Models\Tour::getOne($id_tour); ?>
                                 }
                             } ?>
                             <span class="text-end col-12" style="<?= $tour->isFull() ? "font-weight: bold" : "" ?>">
-                                Kapacita <?= $tour->getNumberOfOrders() ?> / <?= $tour->getCapacity() ?>
+                                Kapacita <?= \App\Auth::getNumOfOrdersForTour($tour->getId()) ?> / <?= $tour->getCapacity() ?>
                             </span>
                         </div>
                     </div>

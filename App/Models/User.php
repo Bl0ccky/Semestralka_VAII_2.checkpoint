@@ -15,7 +15,7 @@ class User extends Model
                                 public ?string $last_name = null,
                                 public ?string $date = null,
                                 public ?string $authorization = "user",
-                                public ?string $image = "default_profile_pic.png")
+                                public ?string $image = null)
     {
     }
 
@@ -137,6 +137,15 @@ class User extends Model
     public function getDate(): ?string
     {
         return $this->date;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDateEU(): ?string
+    {
+        $date = date_create($this->date);
+        return date_format($date,"d.m.Y");
     }
 
     /**

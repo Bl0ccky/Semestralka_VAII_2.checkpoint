@@ -1,31 +1,21 @@
 <?php /** @var Array $data */
+$id_tour = $data['id_tour'];
+$tour = \App\Models\Tour::getOne($id_tour);
 use App\Config\Configuration; ?>
 <div class="container">
-    <?php if ($data['correctMessage'] != "") { ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong><?= $data['correctMessage'] ?></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php } ?>
-</div>
-<div class="container">
-    <form id="editProfileForm" method="post" action="?c=auth&a=editProfile" enctype="multipart/form-data">
+    <form id="editTourForm" method="post" action="?c=admin&a=editTour" enctype="multipart/form-data">
         <div class="row">
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <?php if(\App\Models\User::getOne(\App\Auth::getId())->getImage()) { ?>
-                                <img src="<?= Configuration::PROFILE_IMAGE_DIR . \App\Models\User::getOne(\App\Auth::getId())->getImage() ?>"
-                                     alt="UserProfilePic"
-                                     class="rounded-circle" width="150" height="150">
-                            <?php } else { ?>
-                                <img src="<?= Configuration::DEFAULT_PROFILE_IMAGE ?>" alt="UserProfilePic" class="rounded-circle" width="150" height="150">
-                            <?php } ?>
-                            <label for="profile_image" class="form-label">Zmeniť profilovú fotku</label>
-                            <input id="profile_image" name="profile_image" class="form-control" type="file">
+                            <img src="<?= Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>"
+                                 alt="Admin"
+                                 class="rounded-circle" width="150" height="150">
+                            <label for="tour_image" class="form-label">Zmeniť obrázok zájazdu</label>
+                            <input id="tour_image" name="tour_image" class="form-control" type="file">
                             <div class="mt-3">
-                                <h4><?= \App\Models\User::getOne(\App\Auth::getId())->getFullName() ?></h4>
+                                <h4><?= $tour->getName() ?></h4>
                             </div>
                         </div>
                     </div>
@@ -37,11 +27,11 @@ use App\Config\Configuration; ?>
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-sm-3">
-                                <h6><label for="name" class="mb-0">Meno</label></h6>
+                                <h6><label for="name" class="mb-0">Názov</label></h6>
                             </div>
                             <div class="col-sm-9 text-secondary form_input">
-                                <input id="name" name="name" type="text" class="form-control"
-                                       value="<?= \App\Models\User::getOne(\App\Auth::getId())->getName() ?>" required>
+                                <input id="name" name="tour_name" type="text" class="form-control"
+                                       value="<?= $tour->getName() ?>" required>
                                 <i class="visually-hidden oNasText fas fa-check-circle"></i>
                                 <i class="visually-hidden oNasText fas fa-exclamation-circle"></i>
                                 <p class="visually-hidden oNasText">Error message</p>
@@ -55,67 +45,30 @@ use App\Config\Configuration; ?>
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-3">
-                                <h6><label for="lastName" class="mb-0">Priezvisko</label></h6>
+                                <h6><label for="price" class="mb-0">Cena</label></h6>
                             </div>
                             <div class="col-sm-9 text-secondary form_input">
-                                <input id="lastName" name="last_name" type="text" class="form-control"
-                                       value="<?= \App\Models\User::getOne(\App\Auth::getId())->getLastName() ?>"
+                                <input id="price" name="tour_price" type="number" class="form-control"
+                                       value="<?= $tour->getPrice() ?>"
                                        required>
                                 <i class="visually-hidden oNasText fas fa-check-circle"></i>
                                 <i class="visually-hidden oNasText fas fa-exclamation-circle"></i>
                                 <p class="visually-hidden oNasText">Error message</p>
-                                <?php if ($data['badLastName'] != "") { ?>
+                                <?php if ($data['badPrice'] != "") { ?>
                                     <div class="alert alert-danger alert-dismissible mt-1">
                                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                        <?= $data['badLastName'] ?>
+                                        <?= $data['badPrice'] ?>
                                     </div>
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-3">
-                                <h6><label for="login" class="mb-0">Login</label></h6>
+                                <h6><label for="date" class="mb-0">Termín</label></h6>
                             </div>
                             <div class="col-sm-9 text-secondary form_input">
-                                <input id="login" name="login" type="text" class="form-control"
-                                       value="<?= \App\Models\User::getOne(\App\Auth::getId())->getLogin() ?>" required>
-                                <i class="visually-hidden oNasText fas fa-check-circle"></i>
-                                <i class="visually-hidden oNasText fas fa-exclamation-circle"></i>
-                                <p class="visually-hidden oNasText">Error message</p>
-                                <?php if ($data['badLogin'] != "") { ?>
-                                    <div class="alert alert-danger alert-dismissible mt-1">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                        <?= $data['badLogin'] ?>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6><label for="email" class="mb-0">Email</label></h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary form_input">
-                                <input id="email" name="email" type="email" class="form-control"
-                                       value="<?= \App\Models\User::getOne(\App\Auth::getId())->getEmail() ?>" required>
-                                <i class="visually-hidden oNasText fas fa-check-circle"></i>
-                                <i class="visually-hidden oNasText fas fa-exclamation-circle"></i>
-                                <p class="visually-hidden oNasText">Error message</p>
-                                <?php if ($data['badEmail'] != "") { ?>
-                                    <div class="alert alert-danger alert-dismissible mt-1">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                        <?= $data['badEmail'] ?>
-                                    </div>
-                                <?php } ?>
-                            </div>
-
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6><label for="date" class="mb-0">Dátum narodenia</label></h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary form_input">
-                                <input id="date" name="date" type="date" class="form-control"
-                                       value="<?= \App\Models\User::getOne(\App\Auth::getId())->getDate() ?>" required>
+                                <input id="date" name="tour_date" type="date" class="form-control"
+                                       value="<?= $tour->getDate() ?>" required>
                                 <i class="visually-hidden oNasText fas fa-check-circle"></i>
                                 <i class="visually-hidden oNasText fas fa-exclamation-circle"></i>
                                 <p class="visually-hidden oNasText">Error message</p>
@@ -127,14 +80,39 @@ use App\Config\Configuration; ?>
                                 <?php } ?>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6><label for="capacity" class="mb-0">Kapacita</label></h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary form_input">
+                                <input id="capacity" name="tour_capacity" type="number" class="form-control"
+                                       value="<?= $tour->getCapacity() ?>" required>
+                                <i class="visually-hidden oNasText fas fa-check-circle"></i>
+                                <i class="visually-hidden oNasText fas fa-exclamation-circle"></i>
+                                <p class="visually-hidden oNasText">Error message</p>
+                                <?php if ($data['badCapacity'] != "") { ?>
+                                    <div class="alert alert-danger alert-dismissible mt-1">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        <?= $data['badCapacity'] ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6><label for="tour_info" class="mb-0">Popis</label></h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary form_input">
+                                <textarea id="tour_info" class="form-control" name="tour_info" form="editTourForm" required><?= $tour->getInfo() ?></textarea>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3 text-secondary">
                                 <button type="submit" class="btn btn-warning px-4">Uložiť zmeny</button>
                             </div>
-                            <div class="col-sm-3">
-                                <a href="?c=auth&a=editPasswordForm" class="btn btn-warning px-4">Zmena hesla</a>
-                            </div>
+                            <input name="edited_tour" type="hidden" value="<?= $tour->getId(); ?>">
                         </div>
                     </div>
                 </div>
@@ -142,6 +120,5 @@ use App\Config\Configuration; ?>
         </div>
     </form>
 </div>
-
 <script src="public/form_validation.js"></script>
 
