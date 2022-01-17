@@ -332,10 +332,8 @@ class AuthController extends AControllerRedirect
                 $this->redirect('auth', 'editPasswordForm',
                     ['badOldPass' => $badOldPass,
                         'badNewPass' => $badNewPass,
-                        'badNewPassAgain' => $badNewPassAgain,
-                        ]);
+                        'badNewPassAgain' => $badNewPassAgain,]);
             }
-
         }
     }
 
