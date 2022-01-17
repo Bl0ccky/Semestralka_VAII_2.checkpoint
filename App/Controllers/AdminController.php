@@ -90,18 +90,6 @@ class AdminController extends AControllerRedirect
             ]);
     }
 
-    public function getAllTours()
-    {
-        $tours = Tour::getAll();
-        return $this->json($tours);
-    }
-
-    public function getNumOfOrders()
-    {
-        $id_tour = $this->request()->getValue('id_tour');
-        return $this->json(Auth::getNumOfOrdersForTour($id_tour));
-    }
-
     public function addTour()
     {
         self::addOrEditTour("add");
@@ -249,17 +237,8 @@ class AdminController extends AControllerRedirect
             Auth::deleteAllTourInfoFromDatabase($id_tour);
             unlink(Configuration::TOUR_IMAGE_DIR . $tour->getImage());
             $tour->delete();
-            //$this->redirect('admin', 'adminer', ['message' => 'Zájazd úspešne vymazaný!']);
 
         }
-        $tours = Tour::getAll();
-        if(empty($tours))
-        {
-            return $this->json('ArrayIsEmpty');
-        }
-
-        return $this->json($tours);
-
     }
 
     public function addBlog()

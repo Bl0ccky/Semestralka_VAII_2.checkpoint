@@ -11,12 +11,14 @@ $tour = \App\Models\Tour::getOne($id_tour); ?>
     <?php } ?>
     <div class="row">
         <div class="tourGuyNadpis mb-4 col-3"><?= $tour->getName() ?>
+            <?php if (\App\Auth::isLogged() && \App\Auth::isAdmin($_SESSION['email'])) { ?>
             <form class="col-3" method="post" action="?c=admin&a=specificTourEditForm">
                 <button type="submit" class="btn p-0" style="color: white; font-size: 20px;">
                     <i class="fas fa-edit"></i>
                 </button>
                 <input name="edited_tour" type="hidden" value="<?= $tour->getId(); ?>">
             </form>
+            <?php } ?>
         </div>
         <div class="col-1">
             <img class="img_country" src="<?= \App\Config\Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>" alt="country_img">

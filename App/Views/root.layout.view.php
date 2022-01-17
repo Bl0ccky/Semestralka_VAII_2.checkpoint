@@ -14,7 +14,7 @@
 
 </head>
 <body>
-<nav class="navbar fixed-top navbar-expand-lg">
+<nav class="navbar fixed-top navbar-expand-xl">
     <div class="container-fluid">
         <a href="?c=home&a=index"> <img class="logo" src="public/images/logo.png" alt="Logo"></a>
         <div class="popis_logo">BookWell</div>

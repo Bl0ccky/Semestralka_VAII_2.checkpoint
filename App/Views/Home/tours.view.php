@@ -40,34 +40,35 @@
             </div>
         </div>
 
-        <div id="tours" class="row text-center mb-5"></div>
-        <!--
-        <?php foreach ($data['tours'] as $tour) { ?>
-            <div class="profil tour col-12 col-md-6 col-lg-3">
-                <div class="row flex-column justify-content-center h-100">
-                    <div>
-                        <div class="nadpis_profil"><?= $tour->getName() ?></div>
-                        <img src="<?= \App\Config\Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>"
-                             class="img-fluid img_country" alt="country-flag"><br>
-                        Cena: <?= $tour->getPrice() ?>€<br>
-                        Termín: <?= $tour->getDateEU() ?><br>
-                        Popis: <?= $tour->getInfo() ?><br>
-                    </div>
-                    <div>
-                        <div class="mt-3 bottom_of_tour">
-                            <form method="post" action="?c=home&a=specificTourForm">
-                                <button type="submit" class="but_objednat_zaj p-1 p-sm-2 p-md-3">Zistiť viac</button>
-                                <input name="id_tour" type="hidden" value="<?= $tour->getId(); ?>">
-                            </form>
-                            <div class="text-end" style="<?= $tour->isFull() ? "font-weight: bold" : "" ?>">
-                                Kapacita <?= \App\Auth::getNumOfOrdersForTour($tour->getId()) ?> / <?= $tour->getCapacity() ?>
+        <div id="toursAfterFilter" class="row text-center mb-5"> </div>
+
+        <div id="toursBeforeFilter" class="row text-center mb-5">
+            <?php foreach ($data['tours'] as $tour) { ?>
+                <div class="profil tour col-12 col-md-6 col-lg-3">
+                    <div class="row flex-column justify-content-center h-100">
+                        <div>
+                            <div class="nadpis_profil"><?= $tour->getName() ?></div>
+                            <img src="<?= \App\Config\Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>"
+                                 class="img-fluid img_country" alt="country-flag"><br>
+                            Cena: <?= $tour->getPrice() ?>€<br>
+                            Termín: <?= $tour->getDateEU() ?><br>
+                            Popis: <?= $tour->getInfo() ?><br>
+                        </div>
+                        <div>
+                            <div class="mt-3 bottom_of_tour">
+                                <form method="post" action="?c=home&a=specificTourForm">
+                                    <button type="submit" class="but_objednat_zaj p-1 p-sm-2 p-md-3">Zistiť viac</button>
+                                    <input name="id_tour" type="hidden" value="<?= $tour->getId(); ?>">
+                                </form>
+                                <div class="text-end" style="<?= $tour->isFull() ? "font-weight: bold" : "" ?>">
+                                    Kapacita <?= \App\Auth::getNumOfOrdersForTour($tour->getId()) ?> / <?= $tour->getCapacity() ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        <?php } ?>
-        -->
+            <?php } ?>
+        </div>
     </div>
 </div>
 

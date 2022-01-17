@@ -4,11 +4,14 @@ class FilteredTours {
     getAllTours() {
         let minPriceValue = document.getElementById("min_price").value;
         let maxPriceValue = document.getElementById("max_price").value;
+
         fetch('?c=home&a=getAllTours&minPrice=' + minPriceValue + '&maxPrice=' + maxPriceValue)
             .then(response => response.json())
             .then(tourData => {
                 let html = "";
                 if (tourData !== 'ArrayIsEmpty') {
+
+                    document.getElementById("toursBeforeFilter").style.display = "none";
                     for (let tour of tourData) {
                         fetch('?c=home&a=getNumOfOrders&id_tour=' + tour.id)
                             .then(response => response.json())
@@ -36,15 +39,18 @@ class FilteredTours {
                                     + "</div>"
                                     + "</div>"
                                     + "</div>"
-                                document.getElementById("tours").innerHTML = html;
-                            })
 
+                                document.getElementById("toursAfterFilter").innerHTML = html;
+                            })
                     }
+
                 } else {
-                    document.getElementById("tours").innerHTML = html+"<div class='oNasText'>"+"Zadanému rozsahu nevyhovuje žiadny zájazd!"+"</div>";
+                    document.getElementById("toursAfterFilter").innerHTML = html+"<div class='oNasText'>"+"Zadanému rozsahu nevyhovuje žiadny zájazd!"+"</div>";
                 }
 
             });
+
+
 
 
     }
@@ -53,7 +59,6 @@ class FilteredTours {
 
 window.onload = function () {
     var ajaxFilteredTours = new FilteredTours()
-    ajaxFilteredTours.getAllTours();
     btnFiler.addEventListener('click', () => {
         ajaxFilteredTours.getAllTours();
     })

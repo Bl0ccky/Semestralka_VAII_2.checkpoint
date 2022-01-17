@@ -10,7 +10,7 @@ namespace App\Config;
 class Configuration
 {
     public const DB_HOST = 'localhost';
-    public const DB_NAME = 'travel';
+    public const DB_NAME = 'tours';
     public const DB_USER = 'root';
     public const DB_PASS = 'dtb456';
 

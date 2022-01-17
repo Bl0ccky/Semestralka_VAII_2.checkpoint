@@ -15,31 +15,25 @@ class Auth
 
     public static function findIdByEmail($email)
     {
-        foreach (User::getAll() as $user)
-        {
-            if($user->getEmail() == $email)
-            {
+        foreach (User::getAll() as $user) {
+            if ($user->getEmail() == $email) {
                 return $user->getId();
             }
         }
         return 0;
     }
-    
+
     public static function login($email, $password)
     {
-        $id= self::findIdByEmail($email);
-        if($id != 0)
-        {
+        $id = self::findIdByEmail($email);
+        if ($id != 0) {
             $user = User::getOne($id);
 
-            if($user->getEmail() == $email &&  password_verify($password, $user->getPassword()))
-            {
+            if ($user->getEmail() == $email && password_verify($password, $user->getPassword())) {
                 $_SESSION['id_user'] = $id;
                 $_SESSION['email'] = $email;
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -54,7 +48,6 @@ class Auth
     }
 
 
-
     public static function isLogged()
     {
         return isset($_SESSION['email']);
@@ -62,15 +55,11 @@ class Auth
 
     public static function isAdmin($email)
     {
-        $id= self::findIdByEmail($email);
-        if($id != 0)
-        {
-            if(User::getOne($id)->getAuthorization() == 'admin')
-            {
+        $id = self::findIdByEmail($email);
+        if ($id != 0) {
+            if (User::getOne($id)->getAuthorization() == 'admin') {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -83,14 +72,12 @@ class Auth
         return (Auth::isLogged() ? $_SESSION['id_user'] : "");
     }
 
-    public static function getNumOfOrdersForTour($id_tour) : int
+    public static function getNumOfOrdersForTour($id_tour): int
     {
         $joinedTours = JoinedTour::getAll();
         $numOfOrders = 0;
-        foreach ($joinedTours as $joinedTour)
-        {
-            if($id_tour == $joinedTour->getIdTour())
-            {
+        foreach ($joinedTours as $joinedTour) {
+            if ($id_tour == $joinedTour->getIdTour()) {
                 $numOfOrders++;
             }
         }
@@ -99,33 +86,22 @@ class Auth
 
     public static function deleteAllUserInfoFromDatabase($id_user)
     {
-        $joinedTours = JoinedTour::getAll();
-        $reviews = Review::getAll();
-        $blogs = Blog::getAll();
+        $joinedTours = JoinedTour::getAll('id_user = ?', [$id_user]);
+        $reviews = Review::getAll('id_user = ?', [$id_user]);
+        $blogs = Blog::getAll('id_user = ?', [$id_user]);
 
-        foreach ($joinedTours as $joinedTour)
-        {
-            if($id_user == $joinedTour->getIdUser())
-            {
-                $joinedTour->delete();
-            }
+        foreach ($joinedTours as $joinedTour) {
+            $joinedTour->delete();
         }
 
-        foreach ($reviews as $review)
-        {
-            if($id_user == $review->getIdUser())
-            {
-                $review->delete();
-            }
+        foreach ($reviews as $review) {
+            $review->delete();
         }
 
-        foreach ($blogs as $blog)
-        {
-            if($id_user == $blog->getIdUser())
-            {
-                unlink(Configuration::BLOG_IMAGE_DIR . $blog->getImage());
-                $blog->delete();
-            }
+        foreach ($blogs as $blog) {
+
+            unlink(Configuration::BLOG_IMAGE_DIR . $blog->getImage());
+            $blog->delete();
         }
 
     }
@@ -135,18 +111,14 @@ class Auth
         $joinedTours = JoinedTour::getAll();
         $reviews = Review::getAll();
 
-        foreach ($joinedTours as $joinedTour)
-        {
-            if($id_tour == $joinedTour->getIdTour())
-            {
+        foreach ($joinedTours as $joinedTour) {
+            if ($id_tour == $joinedTour->getIdTour()) {
                 $joinedTour->delete();
             }
         }
 
-        foreach ($reviews as $review)
-        {
-            if($id_tour == $review->getIdTour())
-            {
+        foreach ($reviews as $review) {
+            if ($id_tour == $review->getIdTour()) {
                 $review->delete();
             }
         }
@@ -156,10 +128,8 @@ class Auth
     public static function alreadyBookedTour($id_tour)
     {
         $id_user = self::getId();
-        foreach (JoinedTour::getAll() as $joinedTour)
-        {
-            if($joinedTour->getIdUser() == $id_user && $joinedTour->getIdTour() == $id_tour)
-            {
+        foreach (JoinedTour::getAll() as $joinedTour) {
+            if ($joinedTour->getIdUser() == $id_user && $joinedTour->getIdTour() == $id_tour) {
                 return true;
             }
         }
@@ -169,29 +139,23 @@ class Auth
     public static function sameReviewText(string $text)
     {
         $id_user = self::getId();
-        foreach (Review::getAll() as $review)
-        {
-            if($review->getText() == $text && $review->getIdUser() == $id_user)
-            {
+        foreach (Review::getAll() as $review) {
+            if ($review->getText() == $text && $review->getIdUser() == $id_user) {
                 return true;
             }
         }
         return false;
     }
 
-    public static function getYearsSinceDate($stringDate) : int
+    public static function getYearsSinceDate($stringDate): int
     {
-        $date=strtotime($stringDate);
-        $years= abs(date('Y',$date)-date('Y'));
-        if($years>0)
-        {
-            if(date('m')>date('m',$date))
-            {
+        $date = strtotime($stringDate);
+        $years = abs(date('Y', $date) - date('Y'));
+        if ($years > 0) {
+            if (date('m') > date('m', $date)) {
                 $years--;
-            }
-            else if(date('m') < date('m',$date))
-            {
-                if (date('d') < date('d',$date)) {
+            } else if (date('m') < date('m', $date)) {
+                if (date('d') < date('d', $date)) {
                     $years--;
                 }
             }
@@ -199,7 +163,7 @@ class Auth
         return $years;
     }
 
-    public static function isSentAnyFile($nameOfFile, $fileDirection) : ?string
+    public static function isSentAnyFile($nameOfFile, $fileDirection): ?string
     {
         if (isset($_FILES[$nameOfFile])) {       //Ak mi prisiel nejaky subor
             if ($_FILES[$nameOfFile]['error'] == UPLOAD_ERR_OK) {
@@ -211,22 +175,18 @@ class Auth
     }
 
 
-    public static function validUserName(?string $name) : bool
+    public static function validUserName(?string $name): bool
     {
-        if(strlen($name) > 255 || $name == null || $name == "")
-        {
+        if (strlen($name) > 255 || $name == null || $name == "") {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static function validPassword($password) : bool
+    public static function validPassword($password): bool
     {
-        if($password == null || $password == "")
-        {
+        if ($password == null || $password == "") {
             return false;
         }
         $uppercase = preg_match('@[A-Z]@', $password);
@@ -234,119 +194,90 @@ class Auth
         $number = preg_match('@[0-9]@', $password);
         $specialChars = preg_match('@[^\w]@', $password);
 
-        if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8 || strlen($password) > 255)
-        {
+        if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8 || strlen($password) > 255) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
 
     }
 
-    public static function validDateOfBirth($date) : bool
+    public static function validDateOfBirth($date): bool
     {
-        if($date == null || $date == "")
-        {
+        if ($date == null || $date == "") {
             return false;
         }
-        if(self::getYearsSinceDate($date) >= 18 && self::getYearsSinceDate($date) < 110)
-        {
+        if (self::getYearsSinceDate($date) >= 18 && self::getYearsSinceDate($date) < 110) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public static function validTourDate($stringDate) : bool
+    public static function validTourDate($stringDate): bool
     {
-        if($stringDate == null || $stringDate == "")
-        {
+        if ($stringDate == null || $stringDate == "") {
             return false;
         }
         $date = new DateTime($stringDate);
         $now = new DateTime();
 
         $dif = ($date->diff($now))->days;
-        if(($date->diff($now))->days > 14 && $date > $now)
-        {
+        if (($date->diff($now))->days >= 14 && $date > $now) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
 
     }
 
-    public static function validTourPrice($price) : bool
+    public static function validTourPrice($price): bool
     {
-        if($price == null || $price == 0)
-        {
+        if ($price == null || $price == 0) {
             return false;
         }
-        if($price < 100)
-        {
+        if ($price < 100) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static function validTourCapacity($capacity) : bool
+    public static function validTourCapacity($capacity): bool
     {
-        if($capacity == null || $capacity == 0)
-        {
+        if ($capacity == null || $capacity == 0) {
             return false;
         }
-        if($capacity < 5)
-        {
+        if ($capacity < 5) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static function validEmail($email) : bool
+    public static function validEmail($email): bool
     {
-        if($email == null || $email == "")
-        {
+        if ($email == null || $email == "") {
             return false;
         }
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($email) < 255)
-        {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($email) < 255) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public static function validLogin($login) : bool
+    public static function validLogin($login): bool
     {
-        if($login == null || $login == "")
-        {
+        if ($login == null || $login == "") {
             return false;
-        }
-        else if(strlen($login) > 255)
-        {
+        } else if (strlen($login) > 255) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
 
     }
-
 
 
 }

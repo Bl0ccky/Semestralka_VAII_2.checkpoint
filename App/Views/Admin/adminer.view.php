@@ -62,12 +62,13 @@
                     <th scope="col">Dátum</th>
                     <th scope="col">Naplnenosť</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
 
-                <tbody id="tours">
+                <tbody>
                 <?php foreach ($data['tours'] as $tour) { ?>
-                    <tr id="<?= $tour->getId() ?>">
+                    <tr id="<?= $tour->getId() ?>" class="align-middle">
                         <th scope="row"><?= $tour->getId() ?></th>
                         <td ><img src="<?= \App\Config\Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>"
                                   class="img-fluid img_country" alt="country-flag"></td>
@@ -75,21 +76,18 @@
                         <td><?= $tour->getDateEU() ?></td>
                         <td><?= \App\Auth::getNumOfOrdersForTour($tour->getId()) ?> / <?= $tour->getCapacity() ?></td>
                         <td>
-
-
-                            <button id="delTour"  class="btn p-0" style="color: white; font-size: 20px;"
-                                    onclick = "removeTour();">
+                            <form method = "post" action = "?c=admin&a=specificTourEditForm">
+                                <button type = "submit" class = "btn p-0" style = "color: white; font-size: 20px;">
+                                    <i class = "fas fa-edit"></i>
+                                    </button>
+                                <input name="edited_tour" type="hidden" value="<?= $tour->getId() ?>">
+                            </form>
+                        </td>
+                        <td>
+                            <button class="btn p-0" style="color: white; font-size: 20px;"
+                                        onclick="removeTour(<?= $tour->getId() ?>)">
                                 <i class="far fa-trash-alt"></i>
                             </button>
-
-                            <form method="post" action="?c=admin&a=deleteTour">
-                                <button id="delTour" type="submit" class="btn p-0" style="color: white; font-size: 20px;"
-                                        onclick="removeTour(<?= $tour->getId() ?>)">
-                                    <i class="far fa-trash-alt"></i>
-                                </button>
-                                <input name="deleted_tour" type="hidden" value="<?= $tour->getId(); ?>">
-                            </form>
-
                         </td>
                     </tr>
 

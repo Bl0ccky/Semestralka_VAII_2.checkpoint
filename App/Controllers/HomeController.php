@@ -174,15 +174,15 @@ class HomeController extends AControllerRedirect
         }
         else if($minPrice == "")
         {
-            $tours = Tour::getAll('price < ?', [$maxPrice]);
+            $tours = Tour::getAll('price <= ?', [$maxPrice]);
         }
         else if($maxPrice == "")
         {
-            $tours = Tour::getAll('price > ?', [$minPrice]);
+            $tours = Tour::getAll('price >= ?', [$minPrice]);
         }
         else
         {
-            $tours = Tour::getAll('price > ? AND price < ?', [$minPrice, $maxPrice]);
+            $tours = Tour::getAll('price >= ? AND price <= ?', [$minPrice, $maxPrice]);
         }
         if(empty($tours))
         {
@@ -196,13 +196,6 @@ class HomeController extends AControllerRedirect
     {
         $id_tour = $this->request()->getValue('id_tour');
         return $this->json(Auth::getNumOfOrdersForTour($id_tour));
-    }
-
-    public function isTourFull()
-    {
-        $id_tour = $this->request()->getValue('id_tour');
-        $tour = Tour::getOne($id_tour);
-        return $this->json($tour->isFull());
     }
 
 }
