@@ -66,17 +66,11 @@
                 </thead>
 
                 <tbody id="tours">
-
-                </tbody>
-
-
-                <!--
                 <?php foreach ($data['tours'] as $tour) { ?>
-                    <tbody>
-                    <tr>
-                        <th scope="row"><?= $tour->getId(); ?></th>
+                    <tr id="<?= $tour->getId() ?>">
+                        <th scope="row"><?= $tour->getId() ?></th>
                         <td ><img src="<?= \App\Config\Configuration::TOUR_IMAGE_DIR . $tour->getImage() ?>"
-                                 class="img-fluid img_country" alt="country-flag"></td>
+                                  class="img-fluid img_country" alt="country-flag"></td>
                         <td><?= $tour->getName() ?></td>
                         <td><?= $tour->getDateEU() ?></td>
                         <td><?= \App\Auth::getNumOfOrdersForTour($tour->getId()) ?> / <?= $tour->getCapacity() ?></td>
@@ -88,20 +82,19 @@
                                 <i class="far fa-trash-alt"></i>
                             </button>
 
-                             <form method="post" action="?c=admin&a=deleteTour">
+                            <form method="post" action="?c=admin&a=deleteTour">
                                 <button id="delTour" type="submit" class="btn p-0" style="color: white; font-size: 20px;"
-                                        onclick="return confirm('Naozaj chcete zrušit tento zájazd?');">
+                                        onclick="removeTour(<?= $tour->getId() ?>)">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
                                 <input name="deleted_tour" type="hidden" value="<?= $tour->getId(); ?>">
                             </form>
 
                         </td>
-
                     </tr>
-                    </tbody>
+
                 <?php } ?>
-                -->
+                </tbody>
             </table>
     </div>
 </div>
